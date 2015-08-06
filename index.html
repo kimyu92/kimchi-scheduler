@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kim scheduler</title>
+  <link rel="stylesheet" type="text/css" href="kim-scheduler/jquery-ui-1.11.4/jquery-ui.min.css">
+  <link rel="stylesheet" type="text/css" href="kim-scheduler/jquery-ui-1.11.4/jquery-ui.theme.min.css">
+  <link rel="stylesheet" type="text/css" href="kim-scheduler/jquery-ui-1.11.4/jquery-ui.structure.min.css">
+  <!-- Materialize CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
+
+  <!-- Javascript -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script type="text/javascript" src="kim-scheduler/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+  <!-- Materialize JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
+
+  <style>
+    #feedback { font-size: 1.4em; }
+    .selectable .ui-selecting { background: #FECA40; }
+    .selectable .ui-selected { background: #F39814; color: white; }
+    .selectable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+    .selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+  </style>
+  <script>
+  $(function() {
+
+    $(".scheduleTable").delegate('.selectable','click',function(event) {
+      $(this).selectable();
+    });
+    
+    var resultList = generateListTimeFromStartAndEndTime('20:00', '23:00', '0:15');
+
+    function setThead(theadClassName){
+      var rowString = '<th>Name</th>';
+      $(resultList).each(function(index){
+        rowString += '<th data-time-slot="'+ resultList[index] +'"">'+ resultList[index] +'</th>';
+      });
+      $(theadClassName).append(rowString);
+    }
+
+    function appendTbodyWithTrow(tbodyName, people_name) {   
+      // Append tr
+      var rowString = '<tr class="selectable">';
+      
+      // Append td
+      rowString += '<td>'+people_name+'</td>';
+
+      // Apppend td time slot
+      $(resultList).each(function(index){
+        rowString += '<td data-time-slot="'+ resultList[index] +'" class="ui-widget-content"></td>';
+      });
+      
+      rowString += '</tr>';
+
+      $(tbodyName).append(rowString);
+    }
+
+    setThead('.scheduleTableThead');
+    appendTbodyWithTrow('.scheduleTableTbody', 'kim');
+
+  });
+
+  /* 
+    precondition: 
+      i. endtime > starttime
+      ii. both time 24 hours format
+      iii. min: 00:00 max 23:59
+    starttime 3:00 (hr:mm)
+    endttime 4:00 
+    gap: 00:15
+    result = [3:00, 3:15, 3:30, 3:45, 4:00]
+    
+    p/s: 
+      only support gap minute for now
+      only support till endtime 23:00
+  */
+  function generateListTimeFromStartAndEndTime(starttime, endttime, gaptime) {
+    var resultList = [];
+
+    var startHour = parseInt(starttime.split(':')[0]);
+    var startMinute = parseInt(endttime.split(':')[1]);
+
+    var endHour = parseInt(endttime.split(':')[0]);
+    var endMinute = parseInt(endttime.split(':')[1]);
+
+    var gapHour = parseInt(gaptime.split(':')[0]);
+    var gapMinute = parseInt(gaptime.split(':')[1]);
+
+    var startDateObj = new Date();
+    var endDateObj = new Date();
+
+    startDateObj.setHours(startHour, startMinute, 0, 0); 
+    endDateObj.setHours(endHour, endMinute, 0, 0);
+
+    // Copy of temporary Date object
+    var tempDateObj = startDateObj;
+    var countOfLoop = 0;
+
+    while ( tempDateObj.getHours() < endDateObj.getHours() || 
+            tempDateObj.getMinutes() <= endDateObj.getMinutes() ){
+            
+            var time_str = addZeroBefore(tempDateObj.getHours()) + ':' + addZeroBefore(tempDateObj.getMinutes());
+      
+            console.log(time_str);
+
+            resultList.push(time_str);
+
+            tempDateObj = new Date(tempDateObj.getTime() + gapMinute*60000);
+    }
+
+    return resultList;
+  }
+
+  function addZeroBefore(n) {
+    return (n < 10 ? '0' : '') + n;
+  }
+
+
+  </script>
+
+</head>
+<body>
+  <button class="generateListButton">Click to generate List</button>
+  <div class="container">
+    <table class="scheduleTable">
+      <thead class="scheduleTableThead">
+      </thead>
+      <tbody class="scheduleTableTbody">
+<!--         <tr class="selectable">
+          <td>Kim</td>
+          <td class="ui-widget-content">Item 1</td>
+          <td class="ui-widget-content">Item 2</td>
+          <td class="ui-widget-content">Item 3</td>
+        </tr>
+        <tr class="selectable">
+          <td>Aseal</td>
+          <td class="ui-widget-content">Item 1</td>
+          <td class="ui-widget-content">Item 2</td>
+          <td class="ui-widget-content">Item 3</td>
+        </tr> -->
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
