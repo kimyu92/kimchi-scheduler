@@ -28,13 +28,9 @@
     // $(".scheduleTable").delegate('.selectable','click',function(event) {
     //   $(this).selectable();
     // });
-    // $(".scheduleTableTbody").delegate('.usherName','click',function(event) {
-    //   // debugger;
-    //   $(this).on('click', function(){
-    //   });
-    // });
     $(".scheduleTable").on('click', '.usherNameButton', function(evt){
       alert('abc');
+      $(this).parent().parent().remove();
     });
 
     $('.addUserNameToList').on('click', function(){
