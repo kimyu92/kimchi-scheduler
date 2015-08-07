@@ -28,6 +28,15 @@
     // $(".scheduleTable").delegate('.selectable','click',function(event) {
     //   $(this).selectable();
     // });
+    // $(".scheduleTableTbody").delegate('.usherName','click',function(event) {
+    //   // debugger;
+    //   $(this).on('click', function(){
+    //   });
+    // });
+    $(".scheduleTable").on('click', '.usherNameButton', function(evt){
+      alert('abc');
+    });
+
     $('.addUserNameToList').on('click', function(){
       var inputName = $('#user_name').val();
 
@@ -46,14 +55,15 @@
 
     function appendTbodyWithTrow(tbodyName, people_name) {   
       
-      /* Append tr
+      /* 
+        Append tr
         Append td name
         Apppend td time slot
         Add selectable listener
       */
 
       var rowString = '<tr class="selectable">';
-      rowString += '<td>'+people_name+'</td>';
+      rowString += '<td class="usherName">'+people_name+'</td>';
 
       $(resultList).each(function(index){
         rowString += '<td data-time-slot="'+ resultList[index] +'" class="ui-widget-content"></td>';
@@ -64,7 +74,9 @@
       $(tbodyName).append(rowString);
 
       // This is not elegant solution at all
-      $('.selectable').selectable();
+      $('.selectable').selectable({
+        filter: ':not(td[class*="usherName"])'
+      });
     }
 
 
