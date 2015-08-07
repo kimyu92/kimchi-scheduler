@@ -36,7 +36,7 @@
     $('.addUserNameToList').on('click', function(){
       var inputName = $('#user_name').val();
 
-      inputName.length > 3 ? appendTbodyWithTrow('.scheduleTableTbody', inputName) : Materialize.toast('Hey length must be more than 3 chars !', 3000);
+      inputName.length > 3 ? appendTbodyWithTrow('.scheduleTableTbody', inputName, 1) : Materialize.toast('Hey length must be more than 3 chars !', 3000);
     });
     
     var resultList = generateListTimeFromStartAndEndTime('00:00', '23:00', '0:15');
@@ -49,7 +49,7 @@
       $(theadClassName).append(rowString);
     }
 
-    function appendTbodyWithTrow(tbodyName, people_name) {   
+    function appendTbodyWithTrow(tbodyName, people_name, people_id) {   
       
       /* 
         Append tr
@@ -60,7 +60,7 @@
 
       var rowString = '<tr class="selectable">';
       rowString += '<td class="usherName"><button class="waves-effect waves-light btn usherNameButton">Del</button></td>';
-      rowString += '<td class="usherName"><div class="usherNameWrapper">'+people_name+'</div></td>';
+      rowString += '<td class="usherName"><div class="usherNameWrapper" data-curr-user-id="'+people_id+'">'+people_name+'</div></td>';
 
       $(resultList).each(function(index){
         rowString += '<td data-time-slot="'+ resultList[index] +'" class="ui-widget-content"></td>';
