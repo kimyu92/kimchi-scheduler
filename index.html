@@ -33,7 +33,7 @@
     //   $(this).on('click', function(){
     //   });
     // });
-    $(".scheduleTable").on('click', '.usherNameButton', function(evt){
+    $(".deleteTable").on('click', '.usherNameButton', function(evt){
       alert('abc');
     });
 
@@ -72,6 +72,8 @@
       rowString += '</tr>';
 
       $(tbodyName).append(rowString);
+
+      $('.deleteTableTbody').append('<tr><td class="center-align"><a class="waves-effect waves-light btn usherNameButton">Del</a></td></tr>');
 
       // This is not elegant solution at all
       $('.selectable').selectable({
@@ -163,13 +165,26 @@
     </div>
     
     <!-- Table -->
-    <table class="scheduleTable">
-      <thead class="scheduleTableThead">
-      </thead>
-      <tbody class="scheduleTableTbody">
-      </tbody>
-    </table>
+    <div class="row">
 
+      <!-- Delete buttons table -->
+      <div class="col s2">
+        <table class="deleteTable">
+          <thead class="deleteTableThead"><th class="center-align">Del</th></thead>
+          <tbody class="deleteTableTbody"></tbody>
+        </table>
+      </div>
+      
+      <!-- Scheduler table -->
+      <div class="col s10">
+        <table class="scheduleTable">
+          <thead class="scheduleTableThead">
+          </thead>
+          <tbody class="scheduleTableTbody">
+          </tbody>
+        </table>
+      </div>    
+    </div>
   </div>
 </body>
 </html>
